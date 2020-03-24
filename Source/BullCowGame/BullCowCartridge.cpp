@@ -14,7 +14,7 @@ void UBullCowCartridge::BeginPlay() // When the game starts
     SetupGame();
 }
 
-void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
+void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
 {
     if (bGameOver) // can do this instead of bGameOver == true becasue we are checking if true to start with.
     {
@@ -23,9 +23,9 @@ void UBullCowCartridge::OnInput(const FString& Input) // When the player hits en
     }  
     else // Checkking Players Guess
     {
-        UE_LOG(LogBullCowGame, Log, TEXT("Input is %s"), *Input);
+        UE_LOG(LogBullCowGame, Log, TEXT("Input is %s"), *PlayerInput);
 
-        ProcessGuess(Input);   
+        ProcessGuess(PlayerInput);   
     }   
 }
 
@@ -53,7 +53,7 @@ void UBullCowCartridge::EndGame()
     PrintLine(TEXT("\nPress enter to play again!"));
 }
 
-void UBullCowCartridge::ProcessGuess(FString Guess)
+void UBullCowCartridge::ProcessGuess(const FString& Guess)
 {
     if (Guess == HiddenWord)
     {
@@ -94,7 +94,7 @@ void UBullCowCartridge::ProcessGuess(FString Guess)
 }
 
 
-bool UBullCowCartridge::IsIsogram(FString Word) const
+bool UBullCowCartridge::IsIsogram(const FString& Word) const
 {
     //UE_LOG(LogBullCowGame, Log, TEXT("Word is %s"), *Word);
 
@@ -116,7 +116,7 @@ bool UBullCowCartridge::IsIsogram(FString Word) const
 }
 
 
-TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
 {
     TArray<FString> ValidWords;
 
