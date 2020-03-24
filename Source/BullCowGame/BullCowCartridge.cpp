@@ -9,8 +9,9 @@ DEFINE_LOG_CATEGORY(LogBullCowGameCriticalErrors);
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-
-    GetValidWords(Words);
+         
+    Isograms = GetValidWords(Words);
+    
     SetupGame();
 }
 
@@ -31,7 +32,7 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 
 void UBullCowCartridge::SetupGame()
 {
-    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)]; //forgot the - 1 when setting this up.
+    HiddenWord = Isograms[FMath::RandRange(0, Isograms.Num() - 1)]; //forgot the - 1 when setting this up.
         UE_LOG(LogBullCowGame, Log, TEXT("HiddenWord is %s"), *HiddenWord);
         UE_LOG(LogBullCowGame, Log, TEXT("HiddenWord has %d characters"), HiddenWord.Len());
     PlayerGuesses = HiddenWord.Len();

@@ -30,5 +30,6 @@ class BULLCOWGAME_API UBullCowCartridge : public UCartridge
 	FString HiddenWord;
 	int32 PlayerGuesses;
 	bool bGameOver;
+	TArray<FString> Isograms;
 
 };
