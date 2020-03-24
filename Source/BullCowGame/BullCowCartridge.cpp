@@ -2,18 +2,19 @@
 #include "BullCowCartridge.h"
 #include "HiddenWordlist.h"
 
-
 DEFINE_LOG_CATEGORY(LogBullCowGame);
 DEFINE_LOG_CATEGORY(LogBullCowGameInit);
 DEFINE_LOG_CATEGORY(LogBullCowGameCriticalErrors);
 
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
+    Super::BeginPlay();
+
     GetValidWords(Words);
     SetupGame();
 }
 
-void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player hits enter
+void UBullCowCartridge::OnInput(const FString& Input) // When the player hits enter
 {
     if (bGameOver) // can do this instead of bGameOver == true becasue we are checking if true to start with.
     {
@@ -22,9 +23,9 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
     }  
     else // Checkking Players Guess
     {
-        UE_LOG(LogBullCowGame, Log, TEXT("Input is %s"), *PlayerInput);
+        UE_LOG(LogBullCowGame, Log, TEXT("Input is %s"), *Input);
 
-        ProcessGuess(PlayerInput);   
+        ProcessGuess(Input);   
     }   
 }
 
@@ -40,8 +41,8 @@ void UBullCowCartridge::SetupGame()
 
     // Welcome The Player
     PrintLine(TEXT("Welcome to Bull Cows!"));
-    PrintLine(TEXT("Guess the hidden word to Win!"));
-    PrintLine(TEXT("The hidden word is %d letters long and \nthe first letter is: %c"), HiddenWord.Len(), HiddenWord[0]);
+    PrintLine(TEXT("To win the game you must guess the %d letter hidden word!"), HiddenWord.Len());
+    PrintLine(TEXT("The first letter of the hidden word is: %c"), HiddenWord[0]);
     PrintLine(TEXT("You have %d guesses"), PlayerGuesses);
     PrintLine(TEXT("Type in your guess and press enter to contiue")); 
 }
@@ -52,7 +53,7 @@ void UBullCowCartridge::EndGame()
     PrintLine(TEXT("\nPress enter to play again!"));
 }
 
-void UBullCowCartridge::ProcessGuess(const FString& Guess)
+void UBullCowCartridge::ProcessGuess(FString Guess)
 {
     if (Guess == HiddenWord)
     {
@@ -72,7 +73,7 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     // Check if guess is not an Isogram
     if (!IsIsogram(Guess))
     {
-        PrintLine(TEXT("That is an invalid guess!\nRemember there can be no repeating letters."), HiddenWord.Len());
+        PrintLine(TEXT("That is an invalid guess! Remember there can be no returning letters."), HiddenWord.Len());
         return;
     }
 
@@ -89,16 +90,11 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     }
 
     // Prompt to guess again and tell how many guesses are left
-    /*if (PlayerGuesses == 1)
-    {
-        PrintLine(TEXT("Guess again, you have %d guess left!"), PlayerGuesses);
-    }*/
-    
     PrintLine(TEXT("Guess again, you have %d guesses left!"), PlayerGuesses);
 }
 
 
-bool UBullCowCartridge::IsIsogram(const FString& Word) const
+bool UBullCowCartridge::IsIsogram(FString Word) const
 {
     //UE_LOG(LogBullCowGame, Log, TEXT("Word is %s"), *Word);
 
@@ -120,7 +116,7 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
 }
 
 
-TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList) const
+TArray<FString> UBullCowCartridge::GetValidWords(TArray<FString> WordList) const
 {
     TArray<FString> ValidWords;
 
@@ -137,10 +133,4 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     UE_LOG(LogBullCowGame, Log, TEXT("# of ValidWords available: %d"), ValidWords.Num());
         
     return ValidWords;
-
-    // Debugging code , look if can use this as an example of console commands
-    //for (int32 Index = 0; Index < ValidWords.Num(); Index++)
-    //{
-    //   UE_LOG(LogBullCowGame, Log, TEXT("ValidWordList %d : %s"), Index, *ValidWords[Index]);
-    //}
 }
