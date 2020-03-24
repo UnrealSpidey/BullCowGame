@@ -90,8 +90,14 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
         return;
     }
 
-    // Prompt to guess again and tell player how many guesses are left
+    //Show the player Bulls and Cows
+    int32 Bulls, Cows;
+    GetBullCows(Guess, Bulls, Cows);
 
+    PrintLine(TEXT("You have %d Bulls and %d Cows"), Bulls, Cows);
+    
+    
+    // Prompt to guess again and tell player how many guesses are left
     if (PlayerGuesses == 1)
     {
         PrintLine(TEXT("Guess again, you have %d guess left!"), PlayerGuesses); // 1 Guess
@@ -131,7 +137,7 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 
     for (FString Word : WordList)
     {
-        if (Word.Len() >= 4 && Word.Len() <= 8 && !IsIsogram(Word))
+        if (Word.Len() >= 4 && Word.Len() <= 8 && IsIsogram(Word))
         {
             ValidWords.Emplace(Word);
         }
@@ -153,4 +159,33 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     //}
             
     return ValidWords;
+}
+
+
+void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const
+{
+    BullCount = 0;
+    CowCount = 0;
+
+    // Bulls are given for every correct letter in correct location
+    // Cows are given for every correct letter guessed but is not in the right location
+    // eg Word is cakes, and guess kaces, 3 bulls and 2 cows
+
+    for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
+    {
+        
+        if (Guess[GuessIndex] == HiddenWord[GuessIndex])
+        {
+            BullCount++;
+            continue;
+        }
+
+        for (int32 HiddenIndex = 0; HiddenIndex < HiddenWord.Len(); HiddenIndex++)
+        {
+            if (Guess[GuessIndex] == HiddenWord[HiddenIndex])
+            {
+                CowCount++;
+            }
+        }
+    }
 }
