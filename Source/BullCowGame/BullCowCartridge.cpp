@@ -31,7 +31,7 @@ void UBullCowCartridge::OnInput(const FString& PlayerInput) // When the player h
 
 void UBullCowCartridge::SetupGame()
 {
-   HiddenWord = "cakes"; 
+    HiddenWord = GetValidWords(Words)[FMath::RandRange(0, GetValidWords(Words).Num() - 1)]; //forgot the - 1 when setting this up.
         UE_LOG(LogBullCowGame, Log, TEXT("HiddenWord is %s"), *HiddenWord);
         UE_LOG(LogBullCowGame, Log, TEXT("HiddenWord has %d characters"), HiddenWord.Len());
     PlayerGuesses = HiddenWord.Len();
@@ -138,6 +138,7 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 
     UE_LOG(LogBullCowGame, Log, TEXT("# of Words available: %d"), WordList.Num());
     UE_LOG(LogBullCowGame, Log, TEXT("# of ValidWords available: %d"), ValidWords.Num());
+    UE_LOG(LogBullCowGame, Log, TEXT("ValidWords - 1: %d"),ValidWords.Num() - 1);
 
     // Debugging code , look if can use this as an example of console commands
     //for (int32 Index = 0; Index < WordList.Num(); Index++)
