@@ -41,10 +41,10 @@ void UBullCowCartridge::SetupGame()
 
     // Welcome The Player
     PrintLine(TEXT("Welcome to Bull Cows!"));
-    PrintLine(TEXT("To win the game you must guess the %d letter hidden word!"), HiddenWord.Len());
-    PrintLine(TEXT("The first letter of the hidden word is: %c"), HiddenWord[0]);
+    PrintLine(TEXT("Guess the hidden word to Win!"));
+    PrintLine(TEXT("The hidden word is %d letters long and \nthe first letter is: %c"), HiddenWord.Len(), HiddenWord[0]);
     PrintLine(TEXT("You have %d guesses"), PlayerGuesses);
-    PrintLine(TEXT("Type in your guess and press enter to contiue")); 
+    PrintLine(TEXT("Type in your guess and \npress enter to contiue"));
 }
 
 void UBullCowCartridge::EndGame()
@@ -73,7 +73,7 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     // Check if guess is not an Isogram
     if (!IsIsogram(Guess))
     {
-        PrintLine(TEXT("That is an invalid guess! Remember there can be no returning letters."), HiddenWord.Len());
+        PrintLine(TEXT("That is an invalid guess! Remember there can be no repeating letters."), HiddenWord.Len());
         return;
     }
 
@@ -89,8 +89,16 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
         return;
     }
 
-    // Prompt to guess again and tell how many guesses are left
-    PrintLine(TEXT("Guess again, you have %d guesses left!"), PlayerGuesses);
+    // Prompt to guess again and tell player how many guesses are left
+
+    if (PlayerGuesses == 1)
+    {
+        PrintLine(TEXT("Guess again, you have %d guess left!"), PlayerGuesses); // 1 Guess
+    }
+    else
+    {
+        PrintLine(TEXT("Guess again, you have %d guesses left!"), PlayerGuesses); // # Guesses
+    }
 }
 
 
@@ -102,8 +110,8 @@ bool UBullCowCartridge::IsIsogram(const FString& Word) const
     {
         for (int32 Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
         {
-            //UE_LOG(LogBullCowGame, Log, TEXT("Index is %d : %c"), Index, Word[Index]);
-            //UE_LOG(LogBullCowGame, Log, TEXT("Comparison is %d : %c"), Comparison, Word[Comparison]);
+            UE_LOG(LogBullCowGame, Verbose, TEXT("Index is %d : %c"), Index, Word[Index]);
+            UE_LOG(LogBullCowGame, Verbose, TEXT("Comparison is %d : %c"), Comparison, Word[Comparison]);
 
             if (Word[Index] == Word[Comparison])
             {
@@ -124,13 +132,23 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     {
         if (Word.Len() >= 4 && Word.Len() <= 8 && !IsIsogram(Word))
         {
-            //UE_LOG(LogBullCowGame, Log, TEXT("WordList %d : %s"), Index, *WordList[Index]);
             ValidWords.Emplace(Word);
         }
     }
 
     UE_LOG(LogBullCowGame, Log, TEXT("# of Words available: %d"), WordList.Num());
     UE_LOG(LogBullCowGame, Log, TEXT("# of ValidWords available: %d"), ValidWords.Num());
+
+    // Debugging code , look if can use this as an example of console commands
+    //for (int32 Index = 0; Index < WordList.Num(); Index++)
+    //{
+    //   UE_LOG(LogBullCowGame, Verbose, TEXT("WordList %d : %s"), Index, *WordList[Index]);
+    //}
         
+    //for (int32 Index = 0; Index < ValidWords.Num(); Index++)
+    //{
+    //   UE_LOG(LogBullCowGame, Verbose, TEXT("ValidWordList %d : %s"), Index, *ValidWords[Index]);
+    //}
+            
     return ValidWords;
 }
