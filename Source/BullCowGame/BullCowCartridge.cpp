@@ -134,7 +134,7 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 {
     TArray<FString> ValidWords;
 
-    for (FString Word : WordList)
+    for (FString Word : WordList) //test
     {
         if (Word.Len() >= 4 && Word.Len() <= 8 && IsIsogram(Word))
         {
