@@ -3,11 +3,14 @@
 
 const TArray<FString> Words = 
 { 
-	//TEXT("Able"), 
-	//TEXT("Bravo"),
-	//TEXT("Charlie"),
-	//TEXT("Delta"),
-	//TEXT("Echo"),
+	
+	TEXT("able"), 
+	TEXT("bravo"),
+	TEXT("charlie"),
+	TEXT("delta"),
+	TEXT("echo"),
+	TEXT("foxtrot")
+	/*
 	TEXT("a"),
 	TEXT("ability"),
 	TEXT("able"),
@@ -1008,4 +1011,5 @@ const TArray<FString> Words =
 	TEXT("young"),
 	TEXT("your"),
 	TEXT("yourself")
+	*/
 };

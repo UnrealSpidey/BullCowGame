@@ -9,7 +9,7 @@ DEFINE_LOG_CATEGORY(LogBullCowGameCriticalErrors);
 void UBullCowCartridge::BeginPlay() // When the game starts
 {
     Super::BeginPlay();
-         
+    
     Isograms = GetValidWords(Words);
     
     SetupGame();
@@ -41,11 +41,11 @@ void UBullCowCartridge::SetupGame()
         UE_LOG(LogBullCowGame, Log, TEXT("bGameOver is %d"), bGameOver);
 
     // Welcome The Player
-    PrintLine(TEXT("Welcome to Bull Cows!"));
-    PrintLine(TEXT("Guess the hidden word to Win!"));
-    PrintLine(TEXT("The hidden word is %d letters long and \nthe first letter is: %c"), HiddenWord.Len(), HiddenWord[0]);
+    PrintLine(TEXT("Welcome to Bulls & Cows!"));
+    PrintLine(TEXT("Can you guess the %d letter hidden word?"), HiddenWord.Len());
     PrintLine(TEXT("You have %d guesses"), PlayerGuesses);
-    PrintLine(TEXT("Type in your guess and \npress enter to contiue"));
+    PrintLine(TEXT("Hint the hidden words first letter is %c"), HiddenWord[0]);
+    PrintLine(TEXT("Type in your guess and press enter!"));
 }
 
 void UBullCowCartridge::EndGame()
@@ -91,11 +91,10 @@ void UBullCowCartridge::ProcessGuess(const FString& Guess)
     }
 
     //Show the player Bulls and Cows
-    int32 Bulls, Cows;
-    GetBullCows(Guess, Bulls, Cows);
+    FBullCowCount Score = GetBullCows(Guess);  
 
-    PrintLine(TEXT("You have %d Bulls and %d Cows"), Bulls, Cows);
-    
+    PrintLine(TEXT("You have %d Bulls and %d Cows"), Score.Bulls, Score.Cows);
+    UE_LOG(LogBullCowGame, Log, TEXT("Bulls %d | Cows %d"), Score.Bulls, Score.Cows);
     
     // Prompt to guess again and tell player how many guesses are left
     if (PlayerGuesses == 1)
@@ -162,21 +161,21 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
 }
 
 
-void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int32& CowCount) const
+FBullCowCount UBullCowCartridge::GetBullCows(const FString& Guess) const
 {
-    BullCount = 0;
-    CowCount = 0;
+    FBullCowCount Count;
 
     // Bulls are given for every correct letter in correct location
     // Cows are given for every correct letter guessed but is not in the right location
     // eg Word is cakes, and guess kaces, 3 bulls and 2 cows
+    // This is case sensitive 
 
     for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
     {
         
         if (Guess[GuessIndex] == HiddenWord[GuessIndex])
         {
-            BullCount++;
+            Count.Bulls++;
             continue;
         }
 
@@ -184,9 +183,10 @@ void UBullCowCartridge::GetBullCows(const FString& Guess, int32& BullCount, int3
         {
             if (Guess[GuessIndex] == HiddenWord[HiddenIndex])
             {
-                CowCount++;
+                Count.Cows++;
                 break;
             }
         }
     }
+    return Count;
 }
