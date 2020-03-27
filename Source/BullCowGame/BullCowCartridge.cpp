@@ -2,8 +2,8 @@
 #include "BullCowCartridge.h"
 #include "HiddenWordlist.h"
 
-DEFINE_LOG_CATEGORY(LogBullCowGame);
-DEFINE_LOG_CATEGORY(LogBullCowGameInit);
+DEFINE_LOG_CATEGORY(LogBullCowGame); //General Log
+DEFINE_LOG_CATEGORY(LogBullCowGameInit); //Logging during game startup
 DEFINE_LOG_CATEGORY(LogBullCowGameCriticalErrors);
 
 void UBullCowCartridge::BeginPlay() // When the game starts
@@ -145,17 +145,6 @@ TArray<FString> UBullCowCartridge::GetValidWords(const TArray<FString>& WordList
     UE_LOG(LogBullCowGame, Log, TEXT("# of Words available: %d"), WordList.Num());
     UE_LOG(LogBullCowGame, Log, TEXT("# of ValidWords available: %d"), ValidWords.Num());
     UE_LOG(LogBullCowGame, Log, TEXT("ValidWords - 1: %d"),ValidWords.Num() - 1);
-
-    // Debugging code , look if can use this as an example of console commands
-    //for (int32 Index = 0; Index < WordList.Num(); Index++)
-    //{
-    //   UE_LOG(LogBullCowGame, Verbose, TEXT("WordList %d : %s"), Index, *WordList[Index]);
-    //}
-        
-    //for (int32 Index = 0; Index < ValidWords.Num(); Index++)
-    //{
-    //   UE_LOG(LogBullCowGame, Verbose, TEXT("ValidWordList %d : %s"), Index, *ValidWords[Index]);
-    //}
             
     return ValidWords;
 }
